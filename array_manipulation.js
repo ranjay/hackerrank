@@ -1,65 +1,75 @@
-process.stdin.resume();
-process.stdin.setEncoding('ascii');
+const readline = require('readline');
+const fs = require('fs');
 
 var input_stdin = "";
 var input_stdin_array = "";
 var input_currentline = 0;
 
-process.stdin.on('data', function (data) {
-    input_stdin += data;
+const rl = readline.createInterface({
+    input: fs.createReadStream('input/am.txt'),
+    crlfDelay: Infinity
 });
 
-process.stdin.on('end', function () {
+rl.on('line', (line) => {
+    input_stdin += "\n" + line;
+}).on('close', () => {
+
     input_stdin_array = input_stdin.split("\n");
-    main();    
+    //console.log(input_stdin_array)
+    main();
 });
 
 function readLine() {
+
     return input_stdin_array[input_currentline++];
 }
-
 /////////////// ignore above this line ////////////////////
-
+var list;
 var max = 0;
 
 
 
 function maximumSum(n, a, b, k) {
-   
-    list[a - 1] = list[a - 1] + k
-    list[b - 1] = list[b - 1] + k
-    if(list[a - 1]>max){
-        max=list[a - 1]
-    }
-    if(list[a - 1]>max){
-        max=list[b - 1]
+    curmax = Math.max(...list)
+    ci = list.indexOf(curmax)
+    if (a < ci < b) {
+        max = curmax + k;
+    } else {
+        list[a - 1] = list[a - 1] + k
+        list[b - 1] = list[b - 1] + k
     }
 }
-
-function maximumSum(n, a, b, k) {
-    for (i = a; i <= b; i++){
-        list[i - 1] = list[i - 1] + k
-    }
+function main() {
+    let n_temp = readLine().split(' ');
+    n_temp = readLine().split(' ');
+    let n = parseInt(n_temp[0]);
+    let m = parseInt(n_temp[1]);
+    let res = new Array(n).fill(0);
+    let sum = 0;
+    let max = 0;
 
   
-}
-
-
-function main() {
-    var n_temp = readLine().split(' ');
     
-    var n = parseInt(n_temp[0]);
-    var m = parseInt(n_temp[1]);
-    list = new Array(n).fill(0);
-    //console.log(m)
-    for (var a0 = 0; a0 < m; a0++) {
+    for(var a0 = 0; a0 < m; a0++){
         var a_temp = readLine().split(' ');
         var a = parseInt(a_temp[0]);
         var b = parseInt(a_temp[1]);
         var k = parseInt(a_temp[2]);
-        maximumSum(n, a, b, k)
+
+
+        res[a-1] += k;
+        if (b<n) res[b]-=k;
+       
     }
-    out = Math.max(...list)
-    console.log(out)
+   console.log(res)
+    console.log(max)
+    for (let i=0; i<n; i++) {
+         console.log(sum)
+         sum += res[i];
+        if (max < sum) max = sum;
+    }
+   
+    console.log(max);
 }
+
 
